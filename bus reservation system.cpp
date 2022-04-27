@@ -1,44 +1,31 @@
 #include <conio.h>
-
 #include <cstdio>
-
 #include <iostream>
-
 #include <string.h>
-
 #include <cstdlib>
 
 using namespace std;
 
-static int p = 0;
+static int p = 0;// pointer to number of buses
 
-class a
-
-{
+class a{
 
   char busn[5], driver[10], arrival[5], depart[5], from[10], to[10], seat[8][4][10];
 
 public:
 
-  void install();
-
+  void install();//add new bus to list
   void allotment();
-
-  void empty();
-
-  void show();
-
-  void avail();
-
+  void empty();// initialize all bus seats with empty
+  void show();// depending on bus no. Shows All seats
+  void avail();// list all available buses
   void position(int i);
-
+  void cancelTicket();//cancel reservation
 }
 
-bus[10];
+bus[10];// buses. [{busn, driver, arrival, depart, from, to} , ...]
 
-void vline(char ch)
-
-{
+void vline(char ch){
 
   for (int i=80;i>0;i--)
 
@@ -46,9 +33,7 @@ void vline(char ch)
 
 }
 
-void a::install()
-
-{
+void a::install(){
 
   cout<<"Enter bus no: ";
 
@@ -80,25 +65,20 @@ void a::install()
 
 }
 
-void a::allotment()
-
-{
+void a::allotment(){
 
   int seat;
 
-  char number[5];
+  char number[5];//bus no
 
   top:
 
   cout<<"Bus no: ";
-
   cin>>number;
 
   int n;
 
-  for(n=0;n<=p;n++)
-
-  {
+  for(n=0;n<=p;n++){
 
     if(strcmp(bus[n].busn, number)==0)
 
@@ -106,62 +86,76 @@ void a::allotment()
 
   }
 
-  while(n<=p)
-
-  {
+  while(n<=p){//if valid bus number then inside. 123->valid bus no-> n=1 (second bus in array)
 
     cout<<"\nSeat Number: ";
 
     cin>>seat;
 
-    if(seat>32)
-
-    {
-
+    if(seat>32){
       cout<<"\nThere are only 32 seats available in this bus.";
-
-    }
-
-    else
-
-    {
-
-    if (strcmp(bus[n].seat[seat/4][(seat%4)-1], "Empty")==0)
-
-      {
-
-        cout<<"Enter passanger's name: ";
-
-        cin>>bus[n].seat[seat/4][(seat%4)-1];
-
-        break;
-
-      }
-
-    else
-
-      cout<<"The seat no. is already reserved.\n";
-
-      }
-
-      }
-
-    if(n>p)
-
-    {
-
-      cout<<"Enter correct bus no.\n";
-
-      goto top;
-
+    }else{
+        if (strcmp(bus[n].seat[seat/4][(seat%4)-1], "Empty")==0){
+            cout<<seat/4<<(seat%4)-1;
+            cout<<"Ticket Amount is 150 INR.";
+            cout<<"Enter passanger's name: ";
+            cin>>bus[n].seat[seat/4][(seat%4)-1];
+            break;
+        }else{
+          cout<<"The seat no. is already reserved.\n";
+        }
     }
 
   }
 
+  if(n>p){//not valid bus number
+    cout<<"Enter correct bus no.\n";
+    goto top;
+  }
 
-void a::empty()
+}
 
-{
+void a::cancelTicket(){
+  char number[5];//bus no
+  int seat;
+  top:
+
+  cout<<"Bus no: ";
+  cin>>number;
+
+  int n;
+
+  for(n=0;n<=p;n++){
+    if(strcmp(bus[n].busn, number)==0){
+      break;
+    }
+  }
+
+  while(n<=p){//if valid bus number then inside. 123->valid bus no-> n=1 (second bus in array)
+    cout<<"\nSeat Number: ";
+    cin>>seat;
+
+    if(seat>32){
+      cout<<"\nInvalid Seat. There are only 32 seats available in this bus.";
+    }else{
+      if (strcmp(bus[n].seat[seat/4][(seat%4)-1], "Empty")==0){
+        cout<<"\nThis seat is not reserved.";
+      }else{
+         strcpy(bus[n].seat[seat/4][(seat%4)-1], "Empty");
+         cout<<"\nReservation is cancelled.";
+         break;
+      }
+    }
+  }
+
+  if(n>p){//not valid bus number
+    cout<<"Enter correct bus no.\n";
+    goto top;
+  }
+
+}
+
+void a::empty(){
 
   for(int i=0; i<8;i++)
 
@@ -179,44 +173,30 @@ void a::empty()
 
 }
 
-void a::show()
-
-{
+void a::show(){
 
   int n;
 
   char number[5];
 
   cout<<"Enter bus no: ";
-
   cin>>number;
 
-  for(n=0;n<=p;n++)
-
-  {
-
+  for(n=0;n<=p;n++){
     if(strcmp(bus[n].busn, number)==0){
-    cout<<"Found "<<n;
-    break;
+     cout<<"Found "<<n;
+     break;
     }
-    
-
   }
 
-while(n<=p)
-
-{
+while(n<=p){
 
   vline('*');
 
   cout<<"Bus no: \t"<<bus[n].busn
-
   <<"\nDriver: \t"<<bus[n].driver<<"\t\tArrival time: \t"
-
   <<bus[n].arrival<<"\tDeparture time:"<<bus[n].depart
-
   <<"\nFrom: \t\t"<<bus[n].from<<"\t\tTo: \t\t"<<
-
   bus[n].to<<"\n";
 
   vline('*');
@@ -225,31 +205,22 @@ while(n<=p)
 
   int a=1;
 
-  for (int i=0; i<8; i++)
-
-  {
-
-    for(int j=0;j<4;j++)
-
-    {
-
+  for (int i=0; i<8; i++){
+    for(int j=0;j<4;j++){
       a++;
-
-      if(strcmp(bus[n].seat[i][j],"Empty")!=0)
-
-      cout<<"\nThe seat no "<<(a-1)<<" is reserved for "<<bus[n].seat[i][j]<<".";
-
+      if(strcmp(bus[n].seat[i][j],"Empty")!=0){
+        cout<<"\nThe seat no "<<(a-1)<<" is reserved for "<<bus[n].seat[i][j]<<".";
+      }
     }
-
   }
 
   break;
 
-  }
+}
 
-  if(n>p)
-
+  if(n>p){
     cout<<"Enter correct bus no: ";
+  }
 
 }
 
@@ -280,7 +251,7 @@ void a::position(int l)
 
           cout.fill(' ');
 
-          cout<<s<<".";
+          cout<<s<<"."<<"["<<i<<"]"<<"["<<j<<"]";
 
           cout.width(10);
 
@@ -361,15 +332,17 @@ while(1)
 
   cout<<"\n\n\n\n\n";
 
-  cout<<"\t\t\t1.Install\n\t\t\t"
+  cout<<"\t\t\t1.Add buses\n\t\t\t"
 
   <<"2.Reservation\n\t\t\t"
 
-  <<"3.Show\n\t\t\t"
+  <<"3.Show Available Seats\n\t\t\t"
 
   <<"4.Buses Available. \n\t\t\t"
 
-  <<"5.Exit";
+  <<"5.Exit"
+
+  <<"6.Cancel Seat Reservation.";
 
   cout<<"\n\t\t\tEnter your choice:-> ";
 
@@ -393,6 +366,9 @@ while(1)
 
     case 4:  bus[0].avail();
 
+      break;
+
+    case 6:  bus[0].cancelTicket(); 
       break;
 
     case 5:  exit(0);
