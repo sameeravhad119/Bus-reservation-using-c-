@@ -96,8 +96,8 @@ void a::allotment(){
       cout<<"\nThere are only 32 seats available in this bus.";
     }else{
         if (strcmp(bus[n].seat[seat/4][(seat%4)-1], "Empty")==0){
-            cout<<seat/4<<(seat%4)-1;
-            cout<<"Ticket Amount is 150 INR.";
+            // cout<<seat/4<<(seat%4)-1;
+            cout<<"Ticket Amount is 150 INR.\n";
             cout<<"Enter passanger's name: ";
             cin>>bus[n].seat[seat/4][(seat%4)-1];
             break;
@@ -251,7 +251,7 @@ void a::position(int l)
 
           cout.fill(' ');
 
-          cout<<s<<"."<<"["<<i<<"]"<<"["<<j<<"]";
+          cout<<s<<".";//<<"["<<i<<"]"<<"["<<j<<"]";
 
           cout.width(10);
 
@@ -336,13 +336,15 @@ while(1)
 
   <<"2.Reservation\n\t\t\t"
 
-  <<"3.Show Available Seats\n\t\t\t"
+  <<"3.Cancel Seat Reservation\n\t\t\t"
 
-  <<"4.Buses Available. \n\t\t\t"
+  <<"4.Show Available Seats\n\t\t\t"
 
-  <<"5.Exit"
+  <<"5.Buses Available. \n\t\t\t"
 
-  <<"6.Cancel Seat Reservation.";
+  <<"6.Exit";
+
+  
 
   cout<<"\n\t\t\tEnter your choice:-> ";
 
@@ -359,19 +361,20 @@ while(1)
     case 2:  bus[p].allotment();
 
       break;
+      
+    case 3:  bus[0].cancelTicket(); 
+    
+      break;
 
-    case 3:  bus[0].show();
+    case 4:  bus[0].show();
 
       break;
 
-    case 4:  bus[0].avail();
+    case 5:  bus[0].avail();
 
       break;
 
-    case 6:  bus[0].cancelTicket(); 
-      break;
-
-    case 5:  exit(0);
+    case 6:  exit(0);
 
   }
 
